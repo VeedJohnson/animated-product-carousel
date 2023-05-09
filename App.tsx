@@ -27,6 +27,42 @@ type PaginationProps = React.FC<{
   scrollX: Animated.Value;
 }>;
 
+const Circle: CircleProps = ({ scrollX }) => {
+  return (
+    <View style={[StyleSheet.absoluteFillObject, styles.circleContainer]}>
+      {data.map(({ color }, index) => {
+        const inputRange = [
+          (index - 0.55) * width,
+          index * width,
+          (index + 0.55) * width,
+        ];
+        const scale = scrollX.interpolate({
+          inputRange,
+          outputRange: [0, 1, 0],
+          extrapolate: "clamp",
+        });
+        const opacity = scrollX.interpolate({
+          inputRange,
+          outputRange: [0, 0.2, 0],
+          extrapolate: "clamp",
+        });
+        return (
+          <Animated.View
+            key={index}
+            style={[
+              styles.circle,
+              {
+                backgroundColor: color,
+                opacity,
+                transform: [{ scale }],
+              },
+            ]}
+          />
+        );
+      })}
+    </View>
+  );
+};
 export default function App() {
   return (
     <View style={styles.container}>
