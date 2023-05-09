@@ -1,5 +1,17 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  Animated,
+  FlatList,
+  ImageSourcePropType,
+} from "react-native";
+import data from "./data";
+
 const { width, height } = Dimensions.get("window");
 const LOGO_WIDTH = 220;
 const LOGO_HEIGHT = 40;
@@ -178,10 +190,33 @@ const Pagination: PaginationProps = ({ scrollX }) => {
 };
 
 export default function App() {
+  const scrollX = React.useRef(new Animated.Value(0)).current;
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <StatusBar style="auto" hidden />
+      <Circle scrollX={scrollX} />
+      <Animated.FlatList
+        keyExtractor={(item) => item.key}
+        data={data}
+        renderItem={({ item, index }) => (
+          <Item {...item} index={index} scrollX={scrollX} />
+        )}
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: true }
+        )}
+        scrollEventThrottle={16}
+      />
+      <Image
+        style={styles.logo}
+        source={require("./assets/ue_black_logo.png")}
+      />
+      <Pagination scrollX={scrollX} />
+      <Ticker scrollX={scrollX} />
     </View>
   );
 }
