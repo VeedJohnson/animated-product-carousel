@@ -145,6 +145,38 @@ const Item: ItemProps = ({
     </View>
   );
 };
+
+const Pagination: PaginationProps = ({ scrollX }) => {
+  const inputRange = [-width, 0, width];
+  const translateX = scrollX.interpolate({
+    inputRange,
+    outputRange: [-DOT_SIZE, 0, DOT_SIZE],
+  });
+
+  return (
+    <View style={[styles.pagination]}>
+      <Animated.View
+        style={[
+          styles.paginationIndicator,
+          {
+            position: "absolute",
+            transform: [{ translateX }],
+          },
+        ]}
+      />
+      {data.map((item) => {
+        return (
+          <View key={item.key} style={styles.paginationDotContainer}>
+            <View
+              style={[styles.paginationDot, { backgroundColor: item.color }]}
+            />
+          </View>
+        );
+      })}
+    </View>
+  );
+};
+
 export default function App() {
   return (
     <View style={styles.container}>
