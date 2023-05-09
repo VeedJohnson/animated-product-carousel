@@ -63,6 +63,27 @@ const Circle: CircleProps = ({ scrollX }) => {
     </View>
   );
 };
+
+const Ticker: TickerProps = ({ scrollX }) => {
+  const inputRange = [-width, 0, width];
+  const translateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [TICKER_HEIGHT, 0, -TICKER_HEIGHT],
+  });
+  return (
+    <View style={styles.tickerContainer}>
+      <Animated.View style={{ transform: [{ translateY }] }}>
+        {data.map(({ type }, index) => {
+          return (
+            <Text key={index} style={styles.tickerText}>
+              {type}
+            </Text>
+          );
+        })}
+      </Animated.View>
+    </View>
+  );
+};
 export default function App() {
   return (
     <View style={styles.container}>
